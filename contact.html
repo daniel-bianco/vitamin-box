@@ -1,19 +1,59 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VitaminBox Offenbach · Contact</title>
     <meta name="description" content="VitaminBox Offenbach contact page" />
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem("vitaminbox-theme");
+          if (theme) document.documentElement.dataset.theme = theme;
+          var lang = localStorage.getItem("vitaminbox-lang");
+          if (lang) document.documentElement.lang = lang;
+        } catch (error) {}
+      })();
+    </script>
     <style>
       :root {
+        color-scheme: dark;
         --bg: #020202;
         --bg-soft: #060606;
+        --surface: rgba(241, 226, 199, 0.03);
+        --surface-strong: rgba(241, 226, 199, 0.06);
+        --glass: rgba(2, 2, 2, 0.72);
         --ink: #f1e2c7;
         --ink-soft: rgba(241, 226, 199, 0.72);
         --ink-faint: rgba(241, 226, 199, 0.34);
         --line: rgba(241, 226, 199, 0.12);
         --max: 1100px;
+        --panel-border: rgba(241, 226, 199, 0.16);
+        --panel-border-soft: rgba(241, 226, 199, 0.08);
+        --grid-line: rgba(241, 226, 199, 0.02);
+        --halo: rgba(241, 226, 199, 0.04);
+        --control-bg: rgba(241, 226, 199, 0.03);
+        --control-hover: rgba(241, 226, 199, 0.06);
+        --control-active: rgba(241, 226, 199, 0.12);
+      }
+      :root[data-theme="light"] {
+        color-scheme: light;
+        --bg: #f4efe6;
+        --bg-soft: #fbf7f1;
+        --surface: rgba(31, 26, 22, 0.04);
+        --surface-strong: rgba(31, 26, 22, 0.07);
+        --glass: rgba(244, 239, 230, 0.82);
+        --ink: #1f1a16;
+        --ink-soft: rgba(31, 26, 22, 0.76);
+        --ink-faint: rgba(31, 26, 22, 0.46);
+        --line: rgba(31, 26, 22, 0.12);
+        --panel-border: rgba(31, 26, 22, 0.18);
+        --panel-border-soft: rgba(31, 26, 22, 0.08);
+        --grid-line: rgba(31, 26, 22, 0.03);
+        --halo: rgba(31, 26, 22, 0.05);
+        --control-bg: rgba(31, 26, 22, 0.04);
+        --control-hover: rgba(31, 26, 22, 0.08);
+        --control-active: rgba(31, 26, 22, 0.12);
       }
       * { box-sizing: border-box; }
       html { scroll-behavior: smooth; }
@@ -22,8 +62,8 @@
         min-height: 100vh;
         color: var(--ink);
         background:
-          radial-gradient(circle at 50% 34%, rgba(241, 226, 199, 0.04), transparent 20%),
-          radial-gradient(circle at 50% 68%, rgba(241, 226, 199, 0.02), transparent 30%),
+          radial-gradient(circle at 50% 34%, var(--halo), transparent 20%),
+          radial-gradient(circle at 50% 68%, color-mix(in srgb, var(--halo) 60%, transparent), transparent 30%),
           linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         overflow-x: hidden;
@@ -34,8 +74,8 @@
         inset: 0;
         pointer-events: none;
         background:
-          linear-gradient(rgba(241, 226, 199, 0.02) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(241, 226, 199, 0.02) 1px, transparent 1px);
+          linear-gradient(var(--grid-line) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
         background-size: 100% 64px, 64px 100%;
         opacity: 0.18;
       }
@@ -46,8 +86,8 @@
         top: 0;
         z-index: 10;
         backdrop-filter: blur(16px);
-        background: rgba(2, 2, 2, 0.72);
-        border-bottom: 1px solid rgba(241, 226, 199, 0.08);
+        background: var(--glass);
+        border-bottom: 1px solid var(--panel-border-soft);
       }
       .topbar-inner {
         min-height: 62px;
@@ -55,6 +95,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 20px;
+        flex-wrap: wrap;
       }
       .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
       .brand-mark { width: 34px; height: 34px; display: grid; place-items: center; flex: none; opacity: 0.92; }
@@ -95,6 +136,53 @@
         opacity: 0.7;
       }
       .nav a:hover::after { transform: scaleX(1); }
+
+      .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .toggle-group {
+        display: inline-grid;
+        grid-auto-flow: column;
+        border: 1px solid var(--panel-border);
+        background: var(--control-bg);
+        overflow: hidden;
+      }
+
+      .toggle-btn {
+        min-width: 50px;
+        min-height: 34px;
+        padding: 0 10px;
+        border: 0;
+        border-right: 1px solid var(--panel-border);
+        background: transparent;
+        color: var(--ink-faint);
+        font: inherit;
+        font-size: 0.68rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background 180ms ease, color 180ms ease;
+      }
+
+      .toggle-btn:last-child {
+        border-right: 0;
+      }
+
+      .toggle-btn:hover {
+        color: var(--ink);
+        background: var(--control-hover);
+      }
+
+      .toggle-btn[aria-pressed="true"] {
+        background: var(--control-active);
+        color: var(--ink);
+      }
       .page {
         min-height: calc(100vh - 62px);
         display: grid;
@@ -307,6 +395,10 @@
       @media (max-width: 899px) {
         .wrap { width: min(var(--max), calc(100% - 18px)); }
         .topbar-inner { min-height: 58px; }
+        .header-controls {
+          width: 100%;
+          justify-content: space-between;
+        }
         .row { flex-direction: column; align-items: center; gap: 6px; }
         .label { min-width: 0; text-align: center; }
         .title { letter-spacing: 0.24em; text-indent: 0.24em; }
@@ -319,7 +411,7 @@
       }
     </style>
   </head>
-  <body>
+  <body data-page="contact">
     <header class="topbar">
       <div class="wrap topbar-inner">
         <div class="brand">
@@ -342,6 +434,16 @@
           <a href="/index.html">Home</a>
           <a href="/about.html">Concept</a>
         </nav>
+        <div class="header-controls" aria-label="Display controls">
+          <div class="toggle-group" aria-label="Theme switcher">
+            <button class="toggle-btn" type="button" data-theme-choice="dark" aria-pressed="true">Dark</button>
+            <button class="toggle-btn" type="button" data-theme-choice="light" aria-pressed="false">Light</button>
+          </div>
+          <div class="toggle-group" aria-label="Language switcher">
+            <button class="toggle-btn" type="button" data-lang-choice="de" aria-pressed="false">DE</button>
+            <button class="toggle-btn" type="button" data-lang-choice="en" aria-pressed="true">EN</button>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -400,11 +502,12 @@
       </div>
     </main>
 
-    <footer class="footer">
-      <div class="wrap footer-inner">
-        <div>VitaminBox Offenbach</div>
-        <div>contact page</div>
-      </div>
-    </footer>
+      <footer class="footer">
+        <div class="wrap footer-inner">
+          <div>VitaminBox Offenbach</div>
+          <div data-footer-role="page">contact page</div>
+        </div>
+      </footer>
+    <script src="./site-controls.js"></script>
   </body>
 </html>

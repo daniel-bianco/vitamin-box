@@ -1,19 +1,40 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VitaminBox Offenbach · Products</title>
     <meta name="description" content="VitaminBox Offenbach context page" />
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem("vitaminbox-theme");
+          if (theme) document.documentElement.dataset.theme = theme;
+          var lang = localStorage.getItem("vitaminbox-lang");
+          if (lang) document.documentElement.lang = lang;
+        } catch (error) {}
+      })();
+    </script>
     <style>
       :root {
+        color-scheme: dark;
         --bg: #020202;
         --bg-soft: #060606;
+        --surface: rgba(241, 226, 199, 0.03);
+        --surface-strong: rgba(241, 226, 199, 0.06);
+        --glass: rgba(2, 2, 2, 0.72);
         --ink: #f1e2c7;
         --ink-soft: rgba(241, 226, 199, 0.72);
         --ink-faint: rgba(241, 226, 199, 0.34);
         --line: rgba(241, 226, 199, 0.12);
         --panel: rgba(241, 226, 199, 0.03);
+        --panel-border: rgba(241, 226, 199, 0.16);
+        --panel-border-soft: rgba(241, 226, 199, 0.08);
+        --grid-line: rgba(241, 226, 199, 0.02);
+        --halo: rgba(241, 226, 199, 0.04);
+        --control-bg: rgba(241, 226, 199, 0.03);
+        --control-hover: rgba(241, 226, 199, 0.06);
+        --control-active: rgba(241, 226, 199, 0.12);
         --max: 1100px;
         --accent: rgba(241, 226, 199, 0.18);
         --vitamins: #d8bc74;
@@ -23,6 +44,27 @@
         --daily: #7faabd;
       }
 
+      :root[data-theme="light"] {
+        color-scheme: light;
+        --bg: #f4efe6;
+        --bg-soft: #fbf7f1;
+        --surface: rgba(31, 26, 22, 0.04);
+        --surface-strong: rgba(31, 26, 22, 0.07);
+        --glass: rgba(244, 239, 230, 0.82);
+        --ink: #1f1a16;
+        --ink-soft: rgba(31, 26, 22, 0.76);
+        --ink-faint: rgba(31, 26, 22, 0.46);
+        --line: rgba(31, 26, 22, 0.12);
+        --panel: rgba(31, 26, 22, 0.04);
+        --panel-border: rgba(31, 26, 22, 0.18);
+        --panel-border-soft: rgba(31, 26, 22, 0.08);
+        --grid-line: rgba(31, 26, 22, 0.03);
+        --halo: rgba(31, 26, 22, 0.05);
+        --control-bg: rgba(31, 26, 22, 0.04);
+        --control-hover: rgba(31, 26, 22, 0.08);
+        --control-active: rgba(31, 26, 22, 0.12);
+      }
+
       * { box-sizing: border-box; }
       html { scroll-behavior: smooth; }
       body {
@@ -30,8 +72,8 @@
         min-height: 100vh;
         color: var(--ink);
         background:
-          radial-gradient(circle at 50% 34%, rgba(241, 226, 199, 0.04), transparent 20%),
-          radial-gradient(circle at 50% 68%, rgba(241, 226, 199, 0.02), transparent 30%),
+          radial-gradient(circle at 50% 34%, var(--halo), transparent 20%),
+          radial-gradient(circle at 50% 68%, color-mix(in srgb, var(--halo) 60%, transparent), transparent 30%),
           linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         overflow-x: hidden;
@@ -42,8 +84,8 @@
         inset: 0;
         pointer-events: none;
         background:
-          linear-gradient(rgba(241, 226, 199, 0.02) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(241, 226, 199, 0.02) 1px, transparent 1px);
+          linear-gradient(var(--grid-line) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
         background-size: 100% 64px, 64px 100%;
         opacity: 0.18;
       }
@@ -54,8 +96,8 @@
         top: 0;
         z-index: 10;
         backdrop-filter: blur(16px);
-        background: rgba(2, 2, 2, 0.72);
-        border-bottom: 1px solid rgba(241, 226, 199, 0.08);
+        background: var(--glass);
+        border-bottom: 1px solid var(--panel-border-soft);
       }
       .topbar-inner {
         min-height: 62px;
@@ -63,6 +105,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 20px;
+        flex-wrap: wrap;
       }
       .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
       .brand-mark { width: 34px; height: 34px; display: grid; place-items: center; flex: none; opacity: 0.92; }
@@ -103,6 +146,53 @@
         opacity: 0.7;
       }
       .nav a:hover::after { transform: scaleX(1); }
+
+      .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .toggle-group {
+        display: inline-grid;
+        grid-auto-flow: column;
+        border: 1px solid var(--panel-border);
+        background: var(--control-bg);
+        overflow: hidden;
+      }
+
+      .toggle-btn {
+        min-width: 50px;
+        min-height: 34px;
+        padding: 0 10px;
+        border: 0;
+        border-right: 1px solid var(--panel-border);
+        background: transparent;
+        color: var(--ink-faint);
+        font: inherit;
+        font-size: 0.68rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background 180ms ease, color 180ms ease;
+      }
+
+      .toggle-btn:last-child {
+        border-right: 0;
+      }
+
+      .toggle-btn:hover {
+        color: var(--ink);
+        background: var(--control-hover);
+      }
+
+      .toggle-btn[aria-pressed="true"] {
+        background: var(--control-active);
+        color: var(--ink);
+      }
 
       .page {
         padding: 28px 0 40px;
@@ -179,8 +269,8 @@
         min-height: 38px;
         padding: 0 14px;
         border-radius: 0;
-        border: 1px solid rgba(241, 226, 199, 0.14);
-        background: rgba(241, 226, 199, 0.03);
+        border: 1px solid var(--panel-border);
+        background: var(--control-bg);
         color: var(--ink);
         font: inherit;
         letter-spacing: 0.16em;
@@ -191,12 +281,12 @@
       }
       .filter-btn:hover {
         transform: translateY(-1px);
-        border-color: rgba(241, 226, 199, 0.26);
-        background: rgba(241, 226, 199, 0.06);
+        border-color: var(--ink-soft);
+        background: var(--control-hover);
       }
       .filter-btn[aria-pressed="true"] {
-        background: rgba(241, 226, 199, 0.12);
-        border-color: rgba(241, 226, 199, 0.34);
+        background: var(--control-active);
+        border-color: var(--ink-soft);
       }
       .filter-btn[data-filter="vitamins"] {
         color: var(--vitamins);
@@ -363,8 +453,8 @@
         min-height: 44px;
         padding: 0 18px;
         border-radius: 0;
-        border: 1px solid rgba(241, 226, 199, 0.16);
-        background: rgba(241, 226, 199, 0.03);
+        border: 1px solid var(--panel-border);
+        background: var(--control-bg);
         color: var(--ink);
         display: inline-flex;
         align-items: center;
@@ -376,8 +466,8 @@
       }
       .btn:hover {
         transform: translateY(-1px);
-        border-color: rgba(241, 226, 199, 0.28);
-        background: rgba(241, 226, 199, 0.06);
+        border-color: var(--ink-soft);
+        background: var(--control-hover);
       }
 
       .footer {
@@ -393,7 +483,7 @@
         justify-content: space-between;
         gap: 12px;
         padding-top: 14px;
-        border-top: 1px solid rgba(241, 226, 199, 0.08);
+        border-top: 1px solid var(--panel-border-soft);
       }
 
       .modal {
@@ -403,7 +493,7 @@
         display: grid;
         place-items: center;
         padding: 16px;
-        background: rgba(0, 0, 0, 0.72);
+        background: color-mix(in srgb, var(--bg) 72%, #000 28%);
         backdrop-filter: blur(14px);
         opacity: 0;
         pointer-events: none;
@@ -416,14 +506,14 @@
       .modal-panel {
         width: min(100%, 760px);
         border-radius: 0;
-        border: 1px solid rgba(241, 226, 199, 0.16);
+        border: 1px solid var(--panel-border);
         position: relative;
         background:
           radial-gradient(circle at 18% 12%, var(--accent), transparent 28%),
-          linear-gradient(180deg, rgba(241, 226, 199, 0.04), transparent 30%),
-          rgba(5, 5, 5, 0.98);
+          linear-gradient(180deg, var(--surface-strong), transparent 30%),
+          color-mix(in srgb, var(--bg-soft) 98%, #000 2%);
         box-shadow:
-          0 0 0 1px rgba(241, 226, 199, 0.02),
+          0 0 0 1px var(--grid-line),
           0 28px 80px rgba(0, 0, 0, 0.55),
           0 0 40px var(--accent);
         overflow: hidden;
@@ -439,7 +529,7 @@
         justify-content: space-between;
         gap: 18px;
         padding: 18px 68px 18px 18px;
-        border-bottom: 1px solid rgba(241, 226, 199, 0.08);
+        border-bottom: 1px solid var(--panel-border-soft);
       }
       .modal-title {
         display: grid;
@@ -460,8 +550,8 @@
       .modal-chip {
         padding: 6px 10px;
         border-radius: 0;
-        border: 1px solid rgba(241, 226, 199, 0.14);
-        background: rgba(241, 226, 199, 0.04);
+        border: 1px solid var(--panel-border);
+        background: var(--surface);
         color: var(--ink-faint);
         font-size: 0.7rem;
         letter-spacing: 0.16em;
@@ -474,17 +564,17 @@
         top: 18px;
         right: 18px;
         border-radius: 0;
-        border: 1px solid rgba(241, 226, 199, 0.16);
-        background: rgba(241, 226, 199, 0.03);
+        border: 1px solid var(--panel-border);
+        background: var(--control-bg);
         color: var(--ink);
         cursor: pointer;
         transition: transform 180ms ease, background 180ms ease, border-color 180ms ease, color 180ms ease;
       }
       .modal-close:hover {
         transform: translateY(-1px);
-        border-color: #ffffff;
-        background: #ffffff;
-        color: #000000;
+        border-color: var(--ink);
+        background: var(--ink);
+        color: var(--bg);
       }
       .modal-body {
         display: grid;
@@ -553,6 +643,10 @@
       @media (max-width: 899px) {
         .wrap { width: min(var(--max), calc(100% - 18px)); }
         .topbar-inner { min-height: 58px; }
+        .header-controls {
+          width: 100%;
+          justify-content: space-between;
+        }
         .product-head {
           flex-direction: column;
           align-items: flex-start;
@@ -581,7 +675,7 @@
       }
     </style>
   </head>
-  <body>
+  <body data-page="about">
     <header class="topbar">
       <div class="wrap topbar-inner">
         <div class="brand">
@@ -605,6 +699,16 @@
           <a href="/index.html">Home</a>
           <a href="/contact.html">Contact</a>
         </nav>
+        <div class="header-controls" aria-label="Display controls">
+          <div class="toggle-group" aria-label="Theme switcher">
+            <button class="toggle-btn" type="button" data-theme-choice="dark" aria-pressed="true">Dark</button>
+            <button class="toggle-btn" type="button" data-theme-choice="light" aria-pressed="false">Light</button>
+          </div>
+          <div class="toggle-group" aria-label="Language switcher">
+            <button class="toggle-btn" type="button" data-lang-choice="de" aria-pressed="false">DE</button>
+            <button class="toggle-btn" type="button" data-lang-choice="en" aria-pressed="true">EN</button>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -638,7 +742,7 @@
       </section>
 
       <section class="grid" id="products">
-        <article class="product featured" data-type="vitamins daily" tabindex="0" role="button" aria-label="Open D3 plus K2 Ritual product details">
+        <article class="product featured" data-product-id="d3k2" data-type="vitamins daily" tabindex="0" role="button" aria-label="Open D3 plus K2 Ritual product details">
           <div class="product-head">
             <h3>D3 + K2 Ritual</h3>
             <div class="price">€24</div>
@@ -650,7 +754,7 @@
             <span class="tag">capsules</span>
           </div>
         </article>
-        <article class="product" data-type="sports daily" tabindex="0" role="button" aria-label="Open Creatine Mono product details">
+        <article class="product" data-product-id="creatine" data-type="sports daily" tabindex="0" role="button" aria-label="Open Creatine Mono product details">
           <div class="product-head">
             <h3>Creatine Mono</h3>
             <div class="price">€19</div>
@@ -662,7 +766,7 @@
             <span class="tag">powder</span>
           </div>
         </article>
-        <article class="product" data-type="recovery sleep" tabindex="0" role="button" aria-label="Open Magnesium Night product details">
+        <article class="product" data-product-id="magnesium" data-type="recovery sleep" tabindex="0" role="button" aria-label="Open Magnesium Night product details">
           <div class="product-head">
             <h3>Magnesium Night</h3>
             <div class="price">€22</div>
@@ -674,7 +778,7 @@
             <span class="tag">powder</span>
           </div>
         </article>
-        <article class="product" data-type="vitamins daily" tabindex="0" role="button" aria-label="Open Omega Softgel product details">
+        <article class="product" data-product-id="omega" data-type="vitamins daily" tabindex="0" role="button" aria-label="Open Omega Softgel product details">
           <div class="product-head">
             <h3>Omega Softgel</h3>
             <div class="price">€18</div>
@@ -686,7 +790,7 @@
             <span class="tag">softgels</span>
           </div>
         </article>
-        <article class="product" data-type="sleep recovery" tabindex="0" role="button" aria-label="Open Sleep Blend product details">
+        <article class="product" data-product-id="sleepblend" data-type="sleep recovery" tabindex="0" role="button" aria-label="Open Sleep Blend product details">
           <div class="product-head">
             <h3>Sleep Blend</h3>
             <div class="price">€29</div>
@@ -698,7 +802,7 @@
             <span class="tag">capsules</span>
           </div>
         </article>
-        <article class="product" data-type="sports recovery" tabindex="0" role="button" aria-label="Open Protein Clean product details">
+        <article class="product" data-product-id="protein" data-type="sports recovery" tabindex="0" role="button" aria-label="Open Protein Clean product details">
           <div class="product-head">
             <h3>Protein Clean</h3>
             <div class="price">€34</div>
@@ -720,7 +824,7 @@
       <footer class="footer">
         <div class="footer-inner">
           <div>VitaminBox Offenbach</div>
-          <div>template products</div>
+          <div data-footer-role="page">template products</div>
         </div>
       </footer>
     </main>
@@ -757,6 +861,7 @@
       </div>
     </div>
 
+    <script src="./site-controls.js"></script>
     <script>
       const buttons = Array.from(document.querySelectorAll(".filter-btn"));
       const products = Array.from(document.querySelectorAll(".product"));
@@ -769,6 +874,7 @@
       const modalType = document.getElementById("modal-type");
       const modalFormat = document.getElementById("modal-format");
       const modalCta = document.getElementById("modal-cta");
+      let activeProduct = null;
       let lastFocus = null;
 
       function setFilter(filter) {
@@ -814,12 +920,14 @@
         modal.setAttribute("aria-hidden", "false");
         document.body.style.overflow = "hidden";
         modalClose.focus();
+        activeProduct = product;
       }
 
       function closeModal() {
         modal.classList.remove("is-open");
         modal.setAttribute("aria-hidden", "true");
         document.body.style.overflow = "";
+        activeProduct = null;
         if (lastFocus && typeof lastFocus.focus === "function") {
           lastFocus.focus();
         }
@@ -840,6 +948,12 @@
       });
 
       modalClose.addEventListener("click", closeModal);
+
+      window.addEventListener("vitaminbox:language-change", () => {
+        if (activeProduct && modal.classList.contains("is-open")) {
+          openModal(activeProduct);
+        }
+      });
 
       document.addEventListener("keydown", (event) => {
         if (event.key === "Escape" && modal.classList.contains("is-open")) {
