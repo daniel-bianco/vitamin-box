@@ -284,6 +284,24 @@
 
       .theme-toggle .toggle-btn {
         min-width: 42px;
+        display: grid;
+        place-items: center;
+        padding: 0;
+      }
+
+      .theme-icon {
+        width: 18px;
+        height: 18px;
+        display: block;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: square;
+        stroke-linejoin: miter;
+        shape-rendering: crispEdges;
+      }
+
+      .theme-icon * {
+        vector-effect: non-scaling-stroke;
       }
 
       .intro-splash {
@@ -718,8 +736,22 @@
           </div>
           <div class="header-controls header-controls--theme" aria-label="Theme controls">
             <div class="toggle-group theme-toggle" aria-label="Theme switcher">
-              <button class="toggle-btn" type="button" data-theme-choice="light" aria-pressed="false" title="Light theme">LT</button>
-              <button class="toggle-btn" type="button" data-theme-choice="dark" aria-pressed="true" title="Dark theme">DK</button>
+              <button class="toggle-btn" type="button" data-theme-choice="light" aria-pressed="false" title="Light theme">
+                <svg class="theme-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M9 7H15V13H9Z" />
+                  <path d="M10 13H14V16H10Z" />
+                  <path d="M9 18H15" />
+                  <path d="M12 2V5M12 20V22M4 12H7M17 12H20M6 5L8 7M18 5L16 7" />
+                </svg>
+              </button>
+              <button class="toggle-btn" type="button" data-theme-choice="dark" aria-pressed="true" title="Dark theme">
+                <svg class="theme-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M9 7H15V13H9Z" />
+                  <path d="M10 13H14V16H10Z" />
+                  <path d="M9 18H15" />
+                  <path d="M5 5L19 19" />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
