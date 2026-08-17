@@ -230,11 +230,12 @@
         width: min(82vw, 360px);
         display: block;
         overflow: visible;
+        color: var(--ink);
         filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.42));
       }
       .stroke {
         fill: none;
-        stroke: var(--ink);
+        stroke: currentColor;
         stroke-width: 5.4;
         stroke-linecap: round;
         stroke-linejoin: round;
@@ -242,6 +243,8 @@
         stroke-dashoffset: 1;
         animation: draw 3.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
       }
+      .logo-text { stroke-width: 11; }
+      .logo-subtext { stroke-width: 10; }
       .stroke.delay-1 { animation-delay: 0.14s; }
       .stroke.delay-2 { animation-delay: 0.26s; }
       .stroke.delay-3 { animation-delay: 0.38s; }
@@ -720,15 +723,19 @@
 
     <main class="page">
       <section class="hero wrap">
-        <svg class="logo" viewBox="0 0 520 340" fill="none" aria-hidden="true">
-          <path d="M84 218L112 112L246 54L398 124L382 236L196 266L84 218Z" class="stroke delay-1" />
-          <path d="M112 112L212 164L398 124" class="stroke delay-2" />
-          <path d="M212 164L196 266" class="stroke delay-3" />
-          <path d="M70 236L196 266L392 238" class="stroke delay-4" />
-          <path d="M100 104L246 44L414 124" class="stroke delay-5" />
-          <path d="M118 96L226 52M246 54L270 64M388 116L414 114" class="stroke delay-6" />
-          <path d="M78 224L96 120M188 252L204 174M376 232L392 128" class="stroke delay-6" />
-          <path d="M104 116L216 156M220 166L392 126M72 230L116 238" class="stroke delay-6" />
+        <svg class="logo logo-full" viewBox="0 0 1040 980" fill="none" aria-hidden="true">
+          <path d="M190 492L230 204L414 92L666 236L650 508L406 610L190 492Z" class="stroke delay-1" />
+          <path d="M230 204L434 330L666 236" class="stroke delay-2" />
+          <path d="M434 330C424 420 414 512 406 610" class="stroke delay-3" />
+          <path d="M176 510L406 610L672 508" class="stroke delay-4" />
+          <path d="M218 188L414 78L692 230" class="stroke delay-5" />
+          <path d="M242 186L382 96M404 88C430 76 440 72 464 92M646 226L694 220" class="stroke delay-6" />
+          <path d="M202 488C218 386 218 294 230 204M390 588C394 496 412 410 434 330M650 508C656 412 660 326 666 236" class="stroke delay-6" />
+          <path d="M72 704L100 812L134 704M166 704L166 812M204 704L272 704M238 704L238 812M296 812L332 704L368 812M310 764L354 764" class="stroke logo-text delay-6" />
+          <path d="M398 812L408 704L456 784L504 704L514 812M552 704L552 812M594 812L594 704L672 812L672 704" class="stroke logo-text delay-6" />
+          <path d="M722 704L722 812M722 704C794 686 804 754 734 760M734 760C812 760 820 830 722 812M828 758C828 720 856 704 878 724C902 748 890 806 856 812C828 816 812 796 812 768M910 704L988 812M988 704L910 812" class="stroke logo-text delay-6" />
+          <path d="M270 910C270 868 318 862 332 894C346 928 308 946 282 930C272 924 270 918 270 910M370 866L370 938M370 866L432 866M370 902L418 902M458 866L458 938M458 866L520 866M458 902L506 902M548 938L548 866L620 938L620 866" class="stroke logo-subtext delay-6" />
+          <path d="M656 866L656 938M656 866C714 852 728 902 672 910M672 910C736 910 734 956 656 938M762 938L798 866L836 938M774 910L822 910M890 876C850 856 830 932 890 930M926 866L926 938M986 866L986 938M926 904L986 904" class="stroke logo-subtext delay-6" />
         </svg>
         <div class="title">Products</div>
         <p class="copy">
