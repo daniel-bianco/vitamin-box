@@ -7,16 +7,13 @@
   }
 
   var page = body.dataset.page || "home";
-  var themeButtons = Array.from(document.querySelectorAll("[data-theme-choice]"));
   var langButtons = Array.from(document.querySelectorAll("[data-lang-choice]"));
-  var themeKey = "vitaminbox-theme";
   var langKey = "vitaminbox-lang";
-  var supportedThemes = ["dark", "light"];
   var supportedLangs = ["en", "de"];
   var state = {
-    theme: readStored(themeKey, "dark"),
     lang: readStored(langKey, "en"),
   };
+  var systemThemeQuery = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
 
   var labels = {
     en: {
@@ -393,10 +390,6 @@
     return supportedLangs.indexOf(lang) === -1 ? "en" : lang;
   }
 
-  function clampTheme(theme) {
-    return supportedThemes.indexOf(theme) === -1 ? "dark" : theme;
-  }
-
   function labelFor(key) {
     var pack = labels[state.lang] || labels.en;
     return pack[key] || key;
@@ -445,22 +438,13 @@
   }
 
   function updateToggleButtons() {
-    themeButtons.forEach(function (button) {
-      button.setAttribute("aria-pressed", String(button.dataset.themeChoice === state.theme));
-    });
-
     langButtons.forEach(function (button) {
       button.setAttribute("aria-pressed", String(button.dataset.langChoice === state.lang));
     });
   }
 
-  function applyTheme(theme, persist) {
-    state.theme = clampTheme(theme);
-    html.dataset.theme = state.theme;
-    if (persist !== false) {
-      writeStored(themeKey, state.theme);
-    }
-    updateToggleButtons();
+  function applyThemeFromSystem() {
+    html.dataset.theme = systemThemeQuery && systemThemeQuery.matches ? "dark" : "light";
   }
 
   function applyLanguage(lang, persist) {
@@ -638,12 +622,6 @@
     translateSharedChrome();
   }
 
-  themeButtons.forEach(function (button) {
-    button.addEventListener("click", function () {
-      applyTheme(button.dataset.themeChoice || "dark");
-    });
-  });
-
   langButtons.forEach(function (button) {
     button.addEventListener("click", function () {
       applyLanguage(button.dataset.langChoice || "en");
@@ -654,6 +632,12 @@
     window.addEventListener("vitaminbox:language-change", translateAboutModalLabels);
   }
 
-  applyTheme(state.theme, false);
+  applyThemeFromSystem();
   applyLanguage(state.lang, false);
+
+  if (systemThemeQuery && typeof systemThemeQuery.addEventListener === "function") {
+    systemThemeQuery.addEventListener("change", applyThemeFromSystem);
+  } else if (systemThemeQuery && typeof systemThemeQuery.addListener === "function") {
+    systemThemeQuery.addListener(applyThemeFromSystem);
+  }
 })();

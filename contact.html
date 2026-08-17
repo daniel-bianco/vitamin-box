@@ -8,10 +8,10 @@
     <script>
       (function () {
         try {
-          var theme = localStorage.getItem("vitaminbox-theme");
-          if (theme) document.documentElement.dataset.theme = theme;
           var lang = localStorage.getItem("vitaminbox-lang");
           if (lang) document.documentElement.lang = lang;
+          var isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+          document.documentElement.dataset.theme = isDark ? "dark" : "light";
         } catch (error) {}
       })();
     </script>
@@ -435,10 +435,6 @@
           <a href="/about.html">Concept</a>
         </nav>
         <div class="header-controls" aria-label="Display controls">
-          <div class="toggle-group" aria-label="Theme switcher">
-            <button class="toggle-btn" type="button" data-theme-choice="dark" aria-pressed="true">Dark</button>
-            <button class="toggle-btn" type="button" data-theme-choice="light" aria-pressed="false">Light</button>
-          </div>
           <div class="toggle-group" aria-label="Language switcher">
             <button class="toggle-btn" type="button" data-lang-choice="de" aria-pressed="false">DE</button>
             <button class="toggle-btn" type="button" data-lang-choice="en" aria-pressed="true">EN</button>
