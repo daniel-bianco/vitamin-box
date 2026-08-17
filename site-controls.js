@@ -8,12 +8,16 @@
 
   var page = body.dataset.page || "home";
   var langButtons = Array.from(document.querySelectorAll("[data-lang-choice]"));
+  var themeButtons = Array.from(document.querySelectorAll("[data-theme-choice]"));
   var langKey = "vitaminbox-lang";
+  var themeKey = "vitaminbox-theme";
   var supportedLangs = ["en", "de"];
+  var supportedThemes = ["light", "dark"];
+  var systemThemeQuery = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
   var state = {
     lang: readStored(langKey, "en"),
+    theme: readStored(themeKey, getSystemTheme()),
   };
-  var systemThemeQuery = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
 
   var labels = {
     en: {
@@ -390,6 +394,14 @@
     return supportedLangs.indexOf(lang) === -1 ? "en" : lang;
   }
 
+  function clampTheme(theme) {
+    return supportedThemes.indexOf(theme) === -1 ? getSystemTheme() : theme;
+  }
+
+  function getSystemTheme() {
+    return systemThemeQuery && systemThemeQuery.matches ? "dark" : "light";
+  }
+
   function labelFor(key) {
     var pack = labels[state.lang] || labels.en;
     return pack[key] || key;
@@ -441,10 +453,30 @@
     langButtons.forEach(function (button) {
       button.setAttribute("aria-pressed", String(button.dataset.langChoice === state.lang));
     });
+
+    themeButtons.forEach(function (button) {
+      var pack = labels[state.lang] || labels.en;
+      var isActive = button.dataset.themeChoice === state.theme;
+      var label = pack[button.dataset.themeChoice] || button.dataset.themeChoice;
+      button.setAttribute("aria-pressed", String(isActive));
+      button.setAttribute("aria-label", label);
+      button.setAttribute("title", label);
+    });
   }
 
   function applyThemeFromSystem() {
-    html.dataset.theme = systemThemeQuery && systemThemeQuery.matches ? "dark" : "light";
+    if (readStored(themeKey, "") === "") {
+      applyTheme(getSystemTheme(), false);
+    }
+  }
+
+  function applyTheme(theme, persist) {
+    state.theme = clampTheme(theme);
+    html.dataset.theme = state.theme;
+    if (persist !== false) {
+      writeStored(themeKey, state.theme);
+    }
+    updateToggleButtons();
   }
 
   function applyLanguage(lang, persist) {
@@ -628,11 +660,17 @@
     });
   });
 
+  themeButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+      applyTheme(button.dataset.themeChoice || getSystemTheme());
+    });
+  });
+
   if (page === "about") {
     window.addEventListener("vitaminbox:language-change", translateAboutModalLabels);
   }
 
-  applyThemeFromSystem();
+  applyTheme(state.theme, false);
   applyLanguage(state.lang, false);
 
   if (systemThemeQuery && typeof systemThemeQuery.addEventListener === "function") {

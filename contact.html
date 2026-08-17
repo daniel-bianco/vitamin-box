@@ -10,7 +10,12 @@
         try {
           var lang = localStorage.getItem("vitaminbox-lang");
           if (lang) document.documentElement.lang = lang;
+          var savedTheme = localStorage.getItem("vitaminbox-theme");
           var isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+          if (savedTheme === "light" || savedTheme === "dark") {
+            document.documentElement.dataset.theme = savedTheme;
+            return;
+          }
           document.documentElement.dataset.theme = isDark ? "dark" : "light";
         } catch (error) {}
       })();
@@ -91,19 +96,26 @@
       }
       .topbar-inner {
         min-height: 62px;
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
         align-items: center;
-        justify-content: space-between;
-        gap: 20px;
-        flex-wrap: wrap;
+        gap: 12px;
       }
-      .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+      .brand {
+        display: grid;
+        justify-items: center;
+        grid-column: 2;
+        justify-self: center;
+        min-width: 0;
+        text-align: center;
+      }
       .brand-mark { width: 34px; height: 34px; display: grid; place-items: center; flex: none; opacity: 0.92; }
       .brand-mark svg { width: 34px; height: 34px; }
       .brand-copy { display: grid; min-width: 0; }
       .brand-copy strong {
         font-size: 0.75rem;
-        letter-spacing: 0.28em;
+        letter-spacing: 0.24em;
+        text-indent: 0.24em;
         text-transform: uppercase;
       }
       .brand-copy span {
@@ -141,9 +153,17 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        margin-left: auto;
-        flex-wrap: wrap;
-        justify-content: flex-end;
+        flex-wrap: nowrap;
+      }
+
+      .header-controls--language {
+        grid-column: 1;
+        justify-self: start;
+      }
+
+      .header-controls--theme {
+        grid-column: 3;
+        justify-self: end;
       }
 
       .toggle-group {
@@ -155,7 +175,7 @@
       }
 
       .toggle-btn {
-        min-width: 50px;
+        min-width: 48px;
         min-height: 34px;
         padding: 0 10px;
         border: 0;
@@ -183,6 +203,7 @@
         background: var(--control-active);
         color: var(--ink);
       }
+      .theme-toggle .toggle-btn { min-width: 42px; }
       .page {
         min-height: calc(100vh - 62px);
         display: grid;
@@ -391,13 +412,11 @@
         0% { opacity: 0; transform: translateY(10px); }
         100% { opacity: 1; transform: translateY(0); }
       }
-      @media (min-width: 900px) { .nav { display: flex; } }
       @media (max-width: 899px) {
         .wrap { width: min(var(--max), calc(100% - 18px)); }
         .topbar-inner { min-height: 58px; }
         .header-controls {
-          width: 100%;
-          justify-content: space-between;
+          width: auto;
         }
         .row { flex-direction: column; align-items: center; gap: 6px; }
         .label { min-width: 0; text-align: center; }
@@ -414,30 +433,22 @@
   <body data-page="contact">
     <header class="topbar">
       <div class="wrap topbar-inner">
-        <div class="brand">
-          <div class="brand-mark" aria-hidden="true">
-            <svg viewBox="0 0 48 48" fill="none">
-              <path d="M11 18.5L24 10L37 18.5L24 27L11 18.5Z" class="stroke delay-1" />
-              <path d="M11 18.5L11 31.5L24 40L24 27L11 18.5Z" class="stroke delay-2" />
-              <path d="M37 18.5L37 31.5L24 40L24 27L37 18.5Z" class="stroke delay-3" />
-              <path d="M11 31.5L24 24L37 31.5" class="stroke delay-4" />
-              <path d="M24 10L24 24" class="stroke delay-5" />
-              <path d="M16 14L30 20" class="stroke delay-6" />
-            </svg>
+        <div class="header-controls header-controls--language" aria-label="Language controls">
+          <div class="toggle-group" aria-label="Language switcher">
+            <button class="toggle-btn" type="button" data-lang-choice="de" aria-pressed="false">DE</button>
+            <button class="toggle-btn" type="button" data-lang-choice="en" aria-pressed="true">EN</button>
           </div>
+        </div>
+        <div class="brand">
           <div class="brand-copy">
             <strong>VitaminBox</strong>
             <span>Contact</span>
           </div>
         </div>
-        <nav class="nav" aria-label="Navigation">
-          <a href="/index.html">Home</a>
-          <a href="/about.html">Concept</a>
-        </nav>
-        <div class="header-controls" aria-label="Display controls">
-          <div class="toggle-group" aria-label="Language switcher">
-            <button class="toggle-btn" type="button" data-lang-choice="de" aria-pressed="false">DE</button>
-            <button class="toggle-btn" type="button" data-lang-choice="en" aria-pressed="true">EN</button>
+        <div class="header-controls header-controls--theme" aria-label="Theme controls">
+          <div class="toggle-group theme-toggle" aria-label="Theme switcher">
+            <button class="toggle-btn" type="button" data-theme-choice="light" aria-pressed="false" title="Light theme">LT</button>
+            <button class="toggle-btn" type="button" data-theme-choice="dark" aria-pressed="true" title="Dark theme">DK</button>
           </div>
         </div>
       </div>
