@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VitaminBox Offenbach · Contact</title>
+    <meta name="description" content="VitaminBox Offenbach contact page" />
+    <script>
+      (function () {
+        try {
+          var lang = localStorage.getItem("vitaminbox-lang");
+          if (lang) document.documentElement.lang = lang;
+          var isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+          document.documentElement.dataset.theme = isDark ? "dark" : "light";
+        } catch (error) {}
+      })();
+    </script>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #020202;
+        --bg-soft: #060606;
+        --surface: rgba(241, 226, 199, 0.03);
+        --surface-strong: rgba(241, 226, 199, 0.06);
+        --glass: rgba(2, 2, 2, 0.72);
+        --ink: #f1e2c7;
+        --ink-soft: rgba(241, 226, 199, 0.72);
+        --ink-faint: rgba(241, 226, 199, 0.34);
+        --line: rgba(241, 226, 199, 0.12);
+        --max: 1100px;
+        --panel-border: rgba(241, 226, 199, 0.16);
+        --panel-border-soft: rgba(241, 226, 199, 0.08);
+        --grid-line: rgba(241, 226, 199, 0.02);
+        --halo: rgba(241, 226, 199, 0.04);
+        --control-bg: rgba(241, 226, 199, 0.03);
+        --control-hover: rgba(241, 226, 199, 0.06);
+        --control-active: rgba(241, 226, 199, 0.12);
+      }
+      :root[data-theme="light"] {
+        color-scheme: light;
+        --bg: #f4efe6;
+        --bg-soft: #fbf7f1;
+        --surface: rgba(31, 26, 22, 0.04);
+        --surface-strong: rgba(31, 26, 22, 0.07);
+        --glass: rgba(244, 239, 230, 0.82);
+        --ink: #1f1a16;
+        --ink-soft: rgba(31, 26, 22, 0.76);
+        --ink-faint: rgba(31, 26, 22, 0.46);
+        --line: rgba(31, 26, 22, 0.12);
+        --panel-border: rgba(31, 26, 22, 0.18);
+        --panel-border-soft: rgba(31, 26, 22, 0.08);
+        --grid-line: rgba(31, 26, 22, 0.03);
+        --halo: rgba(31, 26, 22, 0.05);
+        --control-bg: rgba(31, 26, 22, 0.04);
+        --control-hover: rgba(31, 26, 22, 0.08);
+        --control-active: rgba(31, 26, 22, 0.12);
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 50% 34%, var(--halo), transparent 20%),
+          radial-gradient(circle at 50% 68%, color-mix(in srgb, var(--halo) 60%, transparent), transparent 30%),
+          linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        overflow-x: hidden;
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(var(--grid-line) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+        background-size: 100% 64px, 64px 100%;
+        opacity: 0.18;
+      }
+      a { color: inherit; text-decoration: none; }
+      .wrap { width: min(var(--max), calc(100% - 24px)); margin: 0 auto; }
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: blur(16px);
+        background: var(--glass);
+        border-bottom: 1px solid var(--panel-border-soft);
+      }
+      .topbar-inner {
+        min-height: 62px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+      .brand-mark { width: 34px; height: 34px; display: grid; place-items: center; flex: none; opacity: 0.92; }
+      .brand-mark svg { width: 34px; height: 34px; }
+      .brand-copy { display: grid; min-width: 0; }
+      .brand-copy strong {
+        font-size: 0.75rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+      }
+      .brand-copy span {
+        margin-top: 2px;
+        font-size: 0.76rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+      }
+      .nav {
+        display: none;
+        gap: 18px;
+        color: var(--ink-soft);
+        font-size: 0.78rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      .nav a { position: relative; padding: 6px 0; }
+      .nav a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 2px;
+        height: 1px;
+        background: currentColor;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 220ms ease;
+        opacity: 0.7;
+      }
+      .nav a:hover::after { transform: scaleX(1); }
+
+      .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .toggle-group {
+        display: inline-grid;
+        grid-auto-flow: column;
+        border: 1px solid var(--panel-border);
+        background: var(--control-bg);
+        overflow: hidden;
+      }
+
+      .toggle-btn {
+        min-width: 50px;
+        min-height: 34px;
+        padding: 0 10px;
+        border: 0;
+        border-right: 1px solid var(--panel-border);
+        background: transparent;
+        color: var(--ink-faint);
+        font: inherit;
+        font-size: 0.68rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background 180ms ease, color 180ms ease;
+      }
+
+      .toggle-btn:last-child {
+        border-right: 0;
+      }
+
+      .toggle-btn:hover {
+        color: var(--ink);
+        background: var(--control-hover);
+      }
+
+      .toggle-btn[aria-pressed="true"] {
+        background: var(--control-active);
+        color: var(--ink);
+      }
+      .page {
+        min-height: calc(100vh - 62px);
+        display: grid;
+        place-items: center;
+        padding: 28px 0 34px;
+      }
+      .card {
+        width: min(100%, 760px);
+        display: grid;
+        justify-items: center;
+        text-align: center;
+        gap: 24px;
+      }
+      .logo {
+        width: min(86vw, 420px);
+        display: block;
+        overflow: visible;
+      }
+      .stroke {
+        fill: none;
+        stroke: var(--ink);
+        stroke-width: 2.7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+        animation: draw 3.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+      .stroke.delay-1 { animation-delay: 0.14s; }
+      .stroke.delay-2 { animation-delay: 0.26s; }
+      .stroke.delay-3 { animation-delay: 0.38s; }
+      .stroke.delay-4 { animation-delay: 0.5s; }
+      .stroke.delay-5 { animation-delay: 0.62s; }
+      .stroke.delay-6 { animation-delay: 0.74s; }
+      @keyframes draw {
+        0% { stroke-dashoffset: 1; opacity: 0; }
+        12% { opacity: 1; }
+        100% { stroke-dashoffset: 0; opacity: 1; }
+      }
+      .title {
+        font-size: clamp(1.9rem, 5vw, 3.4rem);
+        line-height: 0.92;
+        letter-spacing: 0.32em;
+        text-indent: 0.32em;
+        text-transform: uppercase;
+        font-weight: 300;
+        opacity: 0;
+        transform: translateY(10px);
+        animation: fadeUp 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation-delay: 1.35s;
+      }
+      .copy {
+        max-width: 42ch;
+        color: var(--ink-soft);
+        font-size: 0.94rem;
+        line-height: 1.8;
+        opacity: 0;
+        transform: translateY(10px);
+        animation: fadeUp 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation-delay: 1.58s;
+      }
+      .meta {
+        width: min(100%, 620px);
+        display: grid;
+        gap: 10px;
+        opacity: 0;
+        transform: translateY(10px);
+        animation: fadeUp 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation-delay: 1.76s;
+      }
+      .row {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: 18px;
+        padding: 14px 0;
+        border-top: 1px solid var(--line);
+      }
+      .row:last-child { border-bottom: 1px solid var(--line); }
+      .label {
+        color: var(--ink-faint);
+        font-size: 0.72rem;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        min-width: 92px;
+        text-align: right;
+      }
+      .value {
+        color: var(--ink-soft);
+        font-size: 0.92rem;
+        line-height: 1.6;
+        text-align: center;
+      }
+      .directions {
+        margin: 12px auto 0;
+        width: fit-content;
+        min-height: 38px;
+        padding: 0 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0;
+        border: 1px solid rgba(241, 226, 199, 0.16);
+        background: rgba(241, 226, 199, 0.03);
+        color: var(--ink);
+        font-size: 0.72rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        transition: transform 220ms ease, border-color 220ms ease, background 220ms ease, color 220ms ease;
+      }
+      .directions:hover {
+        transform: translateY(-1px);
+        border-color: #ffffff;
+        background: #ffffff;
+        color: #000000;
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        opacity: 0;
+        transform: translateY(10px);
+        animation: fadeUp 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation-delay: 2.12s;
+      }
+      .btn {
+        min-height: 44px;
+        padding: 0 18px;
+        border-radius: 0;
+        border: 1px solid rgba(241, 226, 199, 0.16);
+        background: rgba(241, 226, 199, 0.03);
+        color: var(--ink);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        font-size: 0.74rem;
+        transition: transform 220ms ease, border-color 220ms ease, background 220ms ease;
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+        border-color: #ffffff;
+        background: #ffffff;
+        color: #000000;
+      }
+      .links {
+        width: min(100%, 620px);
+        display: grid;
+        gap: 8px;
+        opacity: 0;
+        transform: translateY(10px);
+        animation: fadeUp 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation-delay: 1.94s;
+      }
+      .links-title {
+        color: var(--ink-faint);
+        font-size: 0.72rem;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        padding-top: 4px;
+      }
+      .link-pill {
+        width: 100%;
+        min-height: 46px;
+        border-radius: 0;
+        border: 1px solid rgba(241, 226, 199, 0.16);
+        background: rgba(241, 226, 199, 0.03);
+        color: var(--ink);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 0 16px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        font-size: 0.74rem;
+        transition: transform 220ms ease, border-color 220ms ease, background 220ms ease, color 220ms ease;
+      }
+      .link-pill:hover {
+        transform: translateY(-1px);
+        border-color: #ffffff;
+        background: #ffffff;
+        color: #000000;
+      }
+      .link-pill span {
+        color: inherit;
+      }
+      .footer {
+        padding: 10px 0 18px;
+        color: var(--ink-faint);
+        font-size: 0.72rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      .footer-inner {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding-top: 14px;
+        border-top: 1px solid rgba(241, 226, 199, 0.08);
+      }
+      @keyframes fadeUp {
+        0% { opacity: 0; transform: translateY(10px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+      @media (min-width: 900px) { .nav { display: flex; } }
+      @media (max-width: 899px) {
+        .wrap { width: min(var(--max), calc(100% - 18px)); }
+        .topbar-inner { min-height: 58px; }
+        .header-controls {
+          width: 100%;
+          justify-content: space-between;
+        }
+        .row { flex-direction: column; align-items: center; gap: 6px; }
+        .label { min-width: 0; text-align: center; }
+        .title { letter-spacing: 0.24em; text-indent: 0.24em; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        .stroke, .title, .copy, .meta, .actions { animation: none; opacity: 1; transform: none; }
+        .stroke { stroke-dashoffset: 0; }
+        .btn { transition: none; }
+      }
+    </style>
+  </head>
+  <body data-page="contact">
+    <header class="topbar">
+      <div class="wrap topbar-inner">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none">
+              <path d="M11 18.5L24 10L37 18.5L24 27L11 18.5Z" class="stroke delay-1" />
+              <path d="M11 18.5L11 31.5L24 40L24 27L11 18.5Z" class="stroke delay-2" />
+              <path d="M37 18.5L37 31.5L24 40L24 27L37 18.5Z" class="stroke delay-3" />
+              <path d="M11 31.5L24 24L37 31.5" class="stroke delay-4" />
+              <path d="M24 10L24 24" class="stroke delay-5" />
+              <path d="M16 14L30 20" class="stroke delay-6" />
+            </svg>
+          </div>
+          <div class="brand-copy">
+            <strong>VitaminBox</strong>
+            <span>Contact</span>
+          </div>
+        </div>
+        <nav class="nav" aria-label="Navigation">
+          <a href="/index.html">Home</a>
+          <a href="/about.html">Concept</a>
+        </nav>
+        <div class="header-controls" aria-label="Display controls">
+          <div class="toggle-group" aria-label="Language switcher">
+            <button class="toggle-btn" type="button" data-lang-choice="de" aria-pressed="false">DE</button>
+            <button class="toggle-btn" type="button" data-lang-choice="en" aria-pressed="true">EN</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="wrap card">
+        <svg class="logo" viewBox="0 0 520 560" fill="none" aria-hidden="true">
+          <path d="M164 242L257 178L350 244L257 308L164 242Z" class="stroke delay-1" />
+          <path d="M164 242L158 367L253 430L257 308L164 242Z" class="stroke delay-2" />
+          <path d="M350 244L356 367L253 430L257 308L350 244Z" class="stroke delay-3" />
+          <path d="M164 242L257 278L350 244" class="stroke delay-4" />
+          <path d="M158 367L257 430L356 367" class="stroke delay-5" />
+          <path d="M257 178L257 308L253 430" class="stroke delay-6" />
+        </svg>
+        <div class="title">Contact</div>
+        <p class="copy">
+          A quiet page for reaching the store. Minimal, direct, and built to feel like the same
+          hand-drawn mark.
+        </p>
+        <div class="meta">
+          <div class="row">
+            <div class="label">Address</div>
+            <div class="value">
+              Frankfurter Straße 27<br />
+              ( Rückseite vom City Markt )<br />
+              Offenbach 63065
+            </div>
+          </div>
+          <a class="directions" href="#">Get directions</a>
+          <div class="row">
+            <div class="label">Hours</div>
+            <div class="value">
+              Montag-Freitag 11h-19h<br />
+              Samstag 11h-18h
+            </div>
+          </div>
+        </div>
+        <div class="links">
+          <div class="links-title">Links</div>
+          <a class="link-pill" href="#">
+            <span>WhatsApp</span>
+            <span>Open</span>
+          </a>
+          <a class="link-pill" href="#">
+            <span>Instagram</span>
+            <span>Open</span>
+          </a>
+          <a class="link-pill" href="#">
+            <span>Maps</span>
+            <span>Open</span>
+          </a>
+        </div>
+        <div class="actions">
+          <a class="btn" href="/index.html">Home</a>
+          <a class="btn" href="/about.html">Concept</a>
+        </div>
+      </div>
+    </main>
+
+      <footer class="footer">
+        <div class="wrap footer-inner">
+          <div>VitaminBox Offenbach</div>
+          <div data-footer-role="page">contact page</div>
+        </div>
+      </footer>
+    <script src="./site-controls.js"></script>
+  </body>
+</html>

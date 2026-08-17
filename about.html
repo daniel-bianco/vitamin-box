@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VitaminBox Offenbach · Products</title>
+    <meta name="description" content="VitaminBox Offenbach context page" />
+    <script>
+      (function () {
+        try {
+          var lang = localStorage.getItem("vitaminbox-lang");
+          if (lang) document.documentElement.lang = lang;
+          var isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+          document.documentElement.dataset.theme = isDark ? "dark" : "light";
+        } catch (error) {}
+      })();
+    </script>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #020202;
+        --bg-soft: #060606;
+        --surface: rgba(241, 226, 199, 0.03);
+        --surface-strong: rgba(241, 226, 199, 0.06);
+        --glass: rgba(2, 2, 2, 0.72);
+        --ink: #f1e2c7;
+        --ink-soft: rgba(241, 226, 199, 0.72);
+        --ink-faint: rgba(241, 226, 199, 0.34);
+        --line: rgba(241, 226, 199, 0.12);
+        --panel: rgba(241, 226, 199, 0.03);
+        --panel-border: rgba(241, 226, 199, 0.16);
+        --panel-border-soft: rgba(241, 226, 199, 0.08);
+        --grid-line: rgba(241, 226, 199, 0.02);
+        --halo: rgba(241, 226, 199, 0.04);
+        --control-bg: rgba(241, 226, 199, 0.03);
+        --control-hover: rgba(241, 226, 199, 0.06);
+        --control-active: rgba(241, 226, 199, 0.12);
+        --max: 1100px;
+        --accent: rgba(241, 226, 199, 0.18);
+        --vitamins: #d8bc74;
+        --sports: #93ad92;
+        --recovery: #b98d74;
+        --sleep: #9f92c9;
+        --daily: #7faabd;
+      }
+
+      :root[data-theme="light"] {
+        color-scheme: light;
+        --bg: #f4efe6;
+        --bg-soft: #fbf7f1;
+        --surface: rgba(31, 26, 22, 0.04);
+        --surface-strong: rgba(31, 26, 22, 0.07);
+        --glass: rgba(244, 239, 230, 0.82);
+        --ink: #1f1a16;
+        --ink-soft: rgba(31, 26, 22, 0.76);
+        --ink-faint: rgba(31, 26, 22, 0.46);
+        --line: rgba(31, 26, 22, 0.12);
+        --panel: rgba(31, 26, 22, 0.04);
+        --panel-border: rgba(31, 26, 22, 0.18);
+        --panel-border-soft: rgba(31, 26, 22, 0.08);
+        --grid-line: rgba(31, 26, 22, 0.03);
+        --halo: rgba(31, 26, 22, 0.05);
+        --control-bg: rgba(31, 26, 22, 0.04);
+        --control-hover: rgba(31, 26, 22, 0.08);
+        --control-active: rgba(31, 26, 22, 0.12);
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 50% 34%, var(--halo), transparent 20%),
+          radial-gradient(circle at 50% 68%, color-mix(in srgb, var(--halo) 60%, transparent), transparent 30%),
+          linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        overflow-x: hidden;
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(var(--grid-line) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+        background-size: 100% 64px, 64px 100%;
+        opacity: 0.18;
+      }
+      a { color: inherit; text-decoration: none; }
+      .wrap { width: min(var(--max), calc(100% - 24px)); margin: 0 auto; }
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: blur(16px);
+        background: var(--glass);
+        border-bottom: 1px solid var(--panel-border-soft);
+      }
+      .topbar-inner {
+        min-height: 62px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+      .brand-mark { width: 34px; height: 34px; display: grid; place-items: center; flex: none; opacity: 0.92; }
+      .brand-mark svg { width: 34px; height: 34px; }
+      .brand-copy { display: grid; min-width: 0; }
+      .brand-copy strong {
+        font-size: 0.75rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+      }
+      .brand-copy span {
+        margin-top: 2px;
+        font-size: 0.76rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+      }
+      .nav {
+        display: none;
+        gap: 18px;
+        color: var(--ink-soft);
+        font-size: 0.78rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      .nav a { position: relative; padding: 6px 0; }
+      .nav a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 2px;
+        height: 1px;
+        background: currentColor;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 220ms ease;
+        opacity: 0.7;
+      }
+      .nav a:hover::after { transform: scaleX(1); }
+
+      .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .toggle-group {
+        display: inline-grid;
+        grid-auto-flow: column;
+        border: 1px solid var(--panel-border);
+        background: var(--control-bg);
+        overflow: hidden;
+      }
+
+      .toggle-btn {
+        min-width: 50px;
+        min-height: 34px;
+        padding: 0 10px;
+        border: 0;
+        border-right: 1px solid var(--panel-border);
+        background: transparent;
+        color: var(--ink-faint);
+        font: inherit;
+        font-size: 0.68rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background 180ms ease, color 180ms ease;
+      }
+
+      .toggle-btn:last-child {
+        border-right: 0;
+      }
+
+      .toggle-btn:hover {
+        color: var(--ink);
+        background: var(--control-hover);
+      }
+
+      .toggle-btn[aria-pressed="true"] {
+        background: var(--control-active);
+        color: var(--ink);
+      }
+
+      .page {
+        padding: 28px 0 40px;
+      }
+      .hero {
+        width: min(100%, 760px);
+        margin: 0 auto 24px;
+        display: grid;
+        justify-items: center;
+        text-align: center;
+        gap: 18px;
+      }
+      .logo {
+        width: min(82vw, 360px);
+        display: block;
+        overflow: visible;
+        filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.42));
+      }
+      .stroke {
+        fill: none;
+        stroke: var(--ink);
+        stroke-width: 2.7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+        animation: draw 3.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+      .stroke.delay-1 { animation-delay: 0.14s; }
+      .stroke.delay-2 { animation-delay: 0.26s; }
+      .stroke.delay-3 { animation-delay: 0.38s; }
+      .stroke.delay-4 { animation-delay: 0.5s; }
+      .stroke.delay-5 { animation-delay: 0.62s; }
+      .stroke.delay-6 { animation-delay: 0.74s; }
+      .stroke.delay-7 { animation-delay: 0.86s; }
+      @keyframes draw {
+        0% { stroke-dashoffset: 1; opacity: 0; }
+        12% { opacity: 1; }
+        100% { stroke-dashoffset: 0; opacity: 1; }
+      }
+      .title {
+        font-size: clamp(1.9rem, 5vw, 3.4rem);
+        line-height: 0.92;
+        letter-spacing: 0.32em;
+        text-indent: 0.32em;
+        text-transform: uppercase;
+        font-weight: 300;
+      }
+      .copy {
+        max-width: 46ch;
+        color: var(--ink-soft);
+        font-size: 0.94rem;
+        line-height: 1.8;
+      }
+
+      .toolbar {
+        width: min(100%, 960px);
+        margin: 0 auto 16px;
+        display: grid;
+        gap: 10px;
+      }
+      .toolbar-label {
+        color: var(--ink-faint);
+        font-size: 0.72rem;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+      }
+      .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .filter-btn {
+        min-height: 38px;
+        padding: 0 14px;
+        border-radius: 0;
+        border: 1px solid var(--panel-border);
+        background: var(--control-bg);
+        color: var(--ink);
+        font: inherit;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        font-size: 0.72rem;
+        cursor: pointer;
+        transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+      }
+      .filter-btn:hover {
+        transform: translateY(-1px);
+        border-color: var(--ink-soft);
+        background: var(--control-hover);
+      }
+      .filter-btn[aria-pressed="true"] {
+        background: var(--control-active);
+        border-color: var(--ink-soft);
+      }
+      .filter-btn[data-filter="vitamins"] {
+        color: var(--vitamins);
+        border-color: color-mix(in srgb, var(--vitamins) 52%, transparent);
+      }
+      .filter-btn[data-filter="sports"] {
+        color: var(--sports);
+        border-color: color-mix(in srgb, var(--sports) 52%, transparent);
+      }
+      .filter-btn[data-filter="recovery"] {
+        color: var(--recovery);
+        border-color: color-mix(in srgb, var(--recovery) 52%, transparent);
+      }
+      .filter-btn[data-filter="sleep"] {
+        color: var(--sleep);
+        border-color: color-mix(in srgb, var(--sleep) 52%, transparent);
+      }
+      .filter-btn[data-filter="daily"] {
+        color: var(--daily);
+        border-color: color-mix(in srgb, var(--daily) 52%, transparent);
+      }
+      .filter-btn[data-filter="vitamins"]:hover,
+      .filter-btn[data-filter="sports"]:hover,
+      .filter-btn[data-filter="recovery"]:hover,
+      .filter-btn[data-filter="sleep"]:hover,
+      .filter-btn[data-filter="daily"]:hover {
+        background: rgba(241, 226, 199, 0.06);
+        color: var(--ink);
+      }
+      .filter-btn[data-filter="vitamins"][aria-pressed="true"] {
+        background: color-mix(in srgb, var(--vitamins) 18%, transparent);
+        border-color: color-mix(in srgb, var(--vitamins) 84%, transparent);
+      }
+      .filter-btn[data-filter="sports"][aria-pressed="true"] {
+        background: color-mix(in srgb, var(--sports) 18%, transparent);
+        border-color: color-mix(in srgb, var(--sports) 84%, transparent);
+      }
+      .filter-btn[data-filter="recovery"][aria-pressed="true"] {
+        background: color-mix(in srgb, var(--recovery) 18%, transparent);
+        border-color: color-mix(in srgb, var(--recovery) 84%, transparent);
+      }
+      .filter-btn[data-filter="sleep"][aria-pressed="true"] {
+        background: color-mix(in srgb, var(--sleep) 18%, transparent);
+        border-color: color-mix(in srgb, var(--sleep) 84%, transparent);
+      }
+      .filter-btn[data-filter="daily"][aria-pressed="true"] {
+        background: color-mix(in srgb, var(--daily) 18%, transparent);
+        border-color: color-mix(in srgb, var(--daily) 84%, transparent);
+      }
+
+      .grid {
+        width: min(100%, 960px);
+        margin: 0 auto;
+        display: grid;
+        gap: 10px;
+      }
+      .product {
+        border: 1px solid var(--line);
+        background:
+          radial-gradient(circle at 18% 10%, var(--accent), transparent 30%),
+          linear-gradient(180deg, rgba(241, 226, 199, 0.03), transparent 36%),
+          var(--panel);
+        padding: 16px;
+        display: grid;
+        gap: 12px;
+        opacity: 1;
+        cursor: pointer;
+        box-shadow:
+          0 0 0 1px rgba(241, 226, 199, 0.02),
+          0 18px 42px rgba(0, 0, 0, 0.24),
+          0 0 28px var(--accent);
+        transition: opacity 180ms ease, transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+      }
+      .product:hover {
+        transform: translateY(-1px);
+        border-color: var(--accent);
+        box-shadow:
+          0 0 0 1px rgba(241, 226, 199, 0.03),
+          0 22px 50px rgba(0, 0, 0, 0.28),
+          0 0 34px var(--accent);
+      }
+      .product:focus-visible {
+        outline: 1px solid color-mix(in srgb, var(--accent) 90%, white);
+        outline-offset: 2px;
+      }
+      .product[hidden] {
+        display: none;
+      }
+      .product-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      .product h3 {
+        margin: 0;
+        font-size: 1rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        font-weight: 500;
+      }
+      .price {
+        color: rgba(255, 255, 255, 0.88);
+        font-size: 0.98rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .product p {
+        margin: 0;
+        color: var(--ink-soft);
+        line-height: 1.7;
+        font-size: 0.92rem;
+      }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .tag {
+        padding: 6px 10px;
+        border-radius: 0;
+        border: 1px solid rgba(241, 226, 199, 0.14);
+        background: rgba(241, 226, 199, 0.04);
+        color: var(--ink-faint);
+        font-size: 0.7rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      .tag--vitamins {
+        color: var(--vitamins);
+        border-color: color-mix(in srgb, var(--vitamins) 58%, transparent);
+        background: color-mix(in srgb, var(--vitamins) 14%, transparent);
+      }
+      .tag--sports {
+        color: var(--sports);
+        border-color: color-mix(in srgb, var(--sports) 58%, transparent);
+        background: color-mix(in srgb, var(--sports) 14%, transparent);
+      }
+      .tag--recovery {
+        color: var(--recovery);
+        border-color: color-mix(in srgb, var(--recovery) 58%, transparent);
+        background: color-mix(in srgb, var(--recovery) 14%, transparent);
+      }
+      .tag--sleep {
+        color: var(--sleep);
+        border-color: color-mix(in srgb, var(--sleep) 58%, transparent);
+        background: color-mix(in srgb, var(--sleep) 14%, transparent);
+      }
+      .tag--daily {
+        color: var(--daily);
+        border-color: color-mix(in srgb, var(--daily) 58%, transparent);
+        background: color-mix(in srgb, var(--daily) 14%, transparent);
+      }
+
+      .actions {
+        width: min(100%, 960px);
+        margin: 18px auto 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+      }
+      .btn {
+        min-height: 44px;
+        padding: 0 18px;
+        border-radius: 0;
+        border: 1px solid var(--panel-border);
+        background: var(--control-bg);
+        color: var(--ink);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        font-size: 0.74rem;
+        transition: transform 220ms ease, border-color 220ms ease, background 220ms ease;
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+        border-color: var(--ink-soft);
+        background: var(--control-hover);
+      }
+
+      .footer {
+        width: min(100%, 960px);
+        margin: 26px auto 0;
+        color: var(--ink-faint);
+        font-size: 0.72rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      .footer-inner {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding-top: 14px;
+        border-top: 1px solid var(--panel-border-soft);
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: grid;
+        place-items: center;
+        padding: 16px;
+        background: color-mix(in srgb, var(--bg) 72%, #000 28%);
+        backdrop-filter: blur(14px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 220ms ease;
+      }
+      .modal.is-open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .modal-panel {
+        width: min(100%, 760px);
+        border-radius: 0;
+        border: 1px solid var(--panel-border);
+        position: relative;
+        background:
+          radial-gradient(circle at 18% 12%, var(--accent), transparent 28%),
+          linear-gradient(180deg, var(--surface-strong), transparent 30%),
+          color-mix(in srgb, var(--bg-soft) 98%, #000 2%);
+        box-shadow:
+          0 0 0 1px var(--grid-line),
+          0 28px 80px rgba(0, 0, 0, 0.55),
+          0 0 40px var(--accent);
+        overflow: hidden;
+        transform: translateY(12px) scale(0.985);
+        transition: transform 220ms ease;
+      }
+      .modal.is-open .modal-panel {
+        transform: translateY(0) scale(1);
+      }
+      .modal-head {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 18px 68px 18px 18px;
+        border-bottom: 1px solid var(--panel-border-soft);
+      }
+      .modal-title {
+        display: grid;
+        gap: 10px;
+      }
+      .modal-title h3 {
+        margin: 0;
+        font-size: clamp(1.4rem, 4vw, 2.4rem);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        line-height: 0.92;
+      }
+      .modal-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .modal-chip {
+        padding: 6px 10px;
+        border-radius: 0;
+        border: 1px solid var(--panel-border);
+        background: var(--surface);
+        color: var(--ink-faint);
+        font-size: 0.7rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      .modal-close {
+        min-width: 40px;
+        min-height: 40px;
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        border-radius: 0;
+        border: 1px solid var(--panel-border);
+        background: var(--control-bg);
+        color: var(--ink);
+        cursor: pointer;
+        transition: transform 180ms ease, background 180ms ease, border-color 180ms ease, color 180ms ease;
+      }
+      .modal-close:hover {
+        transform: translateY(-1px);
+        border-color: var(--ink);
+        background: var(--ink);
+        color: var(--bg);
+      }
+      .modal-body {
+        display: grid;
+        gap: 16px;
+        padding: 18px;
+      }
+      .modal-copy {
+        color: var(--ink-soft);
+        line-height: 1.8;
+        max-width: 52ch;
+      }
+      .modal-grid {
+        display: grid;
+        gap: 10px;
+      }
+      .modal-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 12px 0;
+        border-top: 1px solid var(--line);
+      }
+      .modal-row:last-child {
+        border-bottom: 1px solid var(--line);
+      }
+      .modal-label {
+        color: var(--ink-faint);
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        font-size: 0.72rem;
+        white-space: nowrap;
+      }
+      .modal-value {
+        color: rgba(255, 255, 255, 0.9);
+        text-align: right;
+        line-height: 1.6;
+      }
+      .modal-footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        padding: 0 18px 18px;
+      }
+      .modal .btn {
+        min-height: 40px;
+      }
+
+      .product:nth-child(1) { --accent: rgba(188, 176, 148, 0.18); }
+      .product:nth-child(2) { --accent: rgba(149, 166, 152, 0.18); }
+      .product:nth-child(3) { --accent: rgba(168, 151, 137, 0.18); }
+      .product:nth-child(4) { --accent: rgba(170, 158, 176, 0.18); }
+      .product:nth-child(5) { --accent: rgba(151, 170, 182, 0.18); }
+      .product:nth-child(6) { --accent: rgba(177, 168, 145, 0.18); }
+
+      @media (min-width: 900px) {
+        .nav { display: flex; }
+        .page { padding-top: 36px; }
+        .grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .product.featured {
+          grid-column: span 2;
+        }
+      }
+      @media (max-width: 899px) {
+        .wrap { width: min(var(--max), calc(100% - 18px)); }
+        .topbar-inner { min-height: 58px; }
+        .header-controls {
+          width: 100%;
+          justify-content: space-between;
+        }
+        .product-head {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 6px;
+        }
+        .modal-row {
+          flex-direction: column;
+        }
+        .modal-head {
+          padding: 60px 18px 18px;
+        }
+        .modal-close {
+          top: 16px;
+          right: 16px;
+        }
+        .modal-value {
+          text-align: left;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        .stroke { animation: none; stroke-dashoffset: 0; }
+        .filter-btn,
+        .btn,
+        .product { transition: none; }
+      }
+    </style>
+  </head>
+  <body data-page="about">
+    <header class="topbar">
+      <div class="wrap topbar-inner">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none">
+              <path d="M11 18.5L24 10L37 18.5L24 27L11 18.5Z" class="stroke delay-1" />
+              <path d="M11 18.5L11 31.5L24 40L24 27L11 18.5Z" class="stroke delay-2" />
+              <path d="M37 18.5L37 31.5L24 40L24 27L37 18.5Z" class="stroke delay-3" />
+              <path d="M11 31.5L24 24L37 31.5" class="stroke delay-4" />
+              <path d="M24 10L24 24" class="stroke delay-5" />
+              <path d="M16 14L30 20" class="stroke delay-6" />
+              <path d="M18 32L30 39" class="stroke delay-7" />
+            </svg>
+          </div>
+          <div class="brand-copy">
+            <strong>VitaminBox</strong>
+            <span>Products</span>
+          </div>
+        </div>
+        <nav class="nav" aria-label="Navigation">
+          <a href="/index.html">Home</a>
+          <a href="/contact.html">Contact</a>
+        </nav>
+        <div class="header-controls" aria-label="Display controls">
+          <div class="toggle-group" aria-label="Language switcher">
+            <button class="toggle-btn" type="button" data-lang-choice="de" aria-pressed="false">DE</button>
+            <button class="toggle-btn" type="button" data-lang-choice="en" aria-pressed="true">EN</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="hero wrap">
+        <svg class="logo" viewBox="0 0 520 560" fill="none" aria-hidden="true">
+          <path d="M164 242L257 178L350 244L257 308L164 242Z" class="stroke delay-1" />
+          <path d="M164 242L158 367L253 430L257 308L164 242Z" class="stroke delay-2" />
+          <path d="M350 244L356 367L253 430L257 308L350 244Z" class="stroke delay-3" />
+          <path d="M164 242L257 278L350 244" class="stroke delay-4" />
+          <path d="M158 367L257 430L356 367" class="stroke delay-5" />
+          <path d="M257 178L257 308L253 430" class="stroke delay-6" />
+        </svg>
+        <div class="title">Products</div>
+        <p class="copy">
+          Supplement catalogue. Minimal, black, handwritten, and built to
+          read like a calm premium inventory.
+        </p>
+      </section>
+
+      <section class="toolbar wrap" aria-label="Product filters">
+        <div class="toolbar-label">Sort by product type</div>
+        <div class="filters" role="tablist" aria-label="Product types">
+          <button class="filter-btn" type="button" data-filter="all" aria-pressed="true">All</button>
+          <button class="filter-btn" type="button" data-filter="vitamins" aria-pressed="false">Vitamins</button>
+          <button class="filter-btn" type="button" data-filter="sports" aria-pressed="false">Sports</button>
+          <button class="filter-btn" type="button" data-filter="recovery" aria-pressed="false">Recovery</button>
+          <button class="filter-btn" type="button" data-filter="sleep" aria-pressed="false">Sleep</button>
+          <button class="filter-btn" type="button" data-filter="daily" aria-pressed="false">Daily</button>
+        </div>
+      </section>
+
+      <section class="grid" id="products">
+        <article class="product featured" data-product-id="d3k2" data-type="vitamins daily" tabindex="0" role="button" aria-label="Open D3 plus K2 Ritual product details">
+          <div class="product-head">
+            <h3>D3 + K2 Ritual</h3>
+            <div class="price">€24</div>
+          </div>
+          <p>Daily support stack for darker seasons. Clean capsule format with simple dosing.</p>
+        <div class="tags">
+            <span class="tag tag--vitamins">vitamins</span>
+            <span class="tag tag--daily">daily</span>
+            <span class="tag">capsules</span>
+          </div>
+        </article>
+        <article class="product" data-product-id="creatine" data-type="sports daily" tabindex="0" role="button" aria-label="Open Creatine Mono product details">
+          <div class="product-head">
+            <h3>Creatine Mono</h3>
+            <div class="price">€19</div>
+          </div>
+          <p>Unflavoured performance base for training, focus, and recovery routines.</p>
+        <div class="tags">
+            <span class="tag tag--sports">sports</span>
+            <span class="tag tag--daily">daily</span>
+            <span class="tag">powder</span>
+          </div>
+        </article>
+        <article class="product" data-product-id="magnesium" data-type="recovery sleep" tabindex="0" role="button" aria-label="Open Magnesium Night product details">
+          <div class="product-head">
+            <h3>Magnesium Night</h3>
+            <div class="price">€22</div>
+          </div>
+          <p>Quiet evening formula with soft positioning for wind-down and recovery.</p>
+        <div class="tags">
+            <span class="tag tag--recovery">recovery</span>
+            <span class="tag tag--sleep">sleep</span>
+            <span class="tag">powder</span>
+          </div>
+        </article>
+        <article class="product" data-product-id="omega" data-type="vitamins daily" tabindex="0" role="button" aria-label="Open Omega Softgel product details">
+          <div class="product-head">
+            <h3>Omega Softgel</h3>
+            <div class="price">€18</div>
+          </div>
+          <p>Basic omega support with a minimal form factor and a standard daily rhythm.</p>
+        <div class="tags">
+            <span class="tag tag--vitamins">vitamins</span>
+            <span class="tag tag--daily">daily</span>
+            <span class="tag">softgels</span>
+          </div>
+        </article>
+        <article class="product" data-product-id="sleepblend" data-type="sleep recovery" tabindex="0" role="button" aria-label="Open Sleep Blend product details">
+          <div class="product-head">
+            <h3>Sleep Blend</h3>
+            <div class="price">€29</div>
+          </div>
+          <p>Calm-formula template for evening use, designed to look soft and premium.</p>
+        <div class="tags">
+            <span class="tag tag--sleep">sleep</span>
+            <span class="tag tag--recovery">recovery</span>
+            <span class="tag">capsules</span>
+          </div>
+        </article>
+        <article class="product" data-product-id="protein" data-type="sports recovery" tabindex="0" role="button" aria-label="Open Protein Clean product details">
+          <div class="product-head">
+            <h3>Protein Clean</h3>
+            <div class="price">€34</div>
+          </div>
+          <p>Template sports nutrition SKU for post-training routines and everyday support.</p>
+        <div class="tags">
+            <span class="tag tag--sports">sports</span>
+            <span class="tag tag--recovery">recovery</span>
+            <span class="tag">powder</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="actions wrap">
+        <a class="btn" href="/index.html">Home</a>
+        <a class="btn" href="/contact.html">Contact</a>
+      </section>
+
+      <footer class="footer">
+        <div class="footer-inner">
+          <div>VitaminBox Offenbach</div>
+          <div data-footer-role="page">template products</div>
+        </div>
+      </footer>
+    </main>
+
+    <div class="modal" id="product-modal" aria-hidden="true">
+      <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-head">
+          <div class="modal-title">
+            <h3 id="modal-title">Product</h3>
+            <div class="modal-meta" id="modal-tags"></div>
+          </div>
+          <button class="modal-close" type="button" aria-label="Close modal">×</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-copy" id="modal-copy"></p>
+          <div class="modal-grid">
+            <div class="modal-row">
+              <div class="modal-label">Price</div>
+              <div class="modal-value" id="modal-price"></div>
+            </div>
+            <div class="modal-row">
+              <div class="modal-label">Type</div>
+              <div class="modal-value" id="modal-type"></div>
+            </div>
+            <div class="modal-row">
+              <div class="modal-label">Format</div>
+              <div class="modal-value" id="modal-format"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a class="btn" href="#" id="modal-cta">Get details</a>
+        </div>
+      </div>
+    </div>
+
+    <script src="./site-controls.js"></script>
+    <script>
+      const buttons = Array.from(document.querySelectorAll(".filter-btn"));
+      const products = Array.from(document.querySelectorAll(".product"));
+      const modal = document.getElementById("product-modal");
+      const modalClose = modal.querySelector(".modal-close");
+      const modalTitle = document.getElementById("modal-title");
+      const modalTags = document.getElementById("modal-tags");
+      const modalCopy = document.getElementById("modal-copy");
+      const modalPrice = document.getElementById("modal-price");
+      const modalType = document.getElementById("modal-type");
+      const modalFormat = document.getElementById("modal-format");
+      const modalCta = document.getElementById("modal-cta");
+      let activeProduct = null;
+      let lastFocus = null;
+
+      function setFilter(filter) {
+        buttons.forEach((button) => {
+          const active = button.dataset.filter === filter;
+          button.setAttribute("aria-pressed", String(active));
+        });
+
+        products.forEach((product) => {
+          const types = (product.dataset.type || "").split(/\s+/);
+          const show = filter === "all" || types.includes(filter);
+          product.hidden = !show;
+        });
+      }
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => setFilter(button.dataset.filter));
+      });
+
+      function openModal(product) {
+        const title = product.querySelector("h3")?.textContent?.trim() || "Product";
+        const price = product.querySelector(".price")?.textContent?.trim() || "€0";
+        const copy = product.querySelector("p")?.textContent?.trim() || "";
+        const tags = Array.from(product.querySelectorAll(".tag")).map((tag) => tag.textContent.trim());
+        const type = (product.dataset.type || "").split(/\s+/).filter(Boolean).join(" / ") || "—";
+        const format = tags[tags.length - 1] || "—";
+
+        lastFocus = document.activeElement;
+        modalTitle.textContent = title;
+        modalCopy.textContent = copy;
+        modalPrice.textContent = price;
+        modalType.textContent = type;
+        modalFormat.textContent = format;
+        modalTags.innerHTML = "";
+        tags.forEach((tag) => {
+          const span = document.createElement("span");
+          span.className = "modal-chip";
+          span.textContent = tag;
+          modalTags.appendChild(span);
+        });
+        modalCta.href = product.dataset.cta || "#";
+        modal.classList.add("is-open");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        modalClose.focus();
+        activeProduct = product;
+      }
+
+      function closeModal() {
+        modal.classList.remove("is-open");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+        activeProduct = null;
+        if (lastFocus && typeof lastFocus.focus === "function") {
+          lastFocus.focus();
+        }
+      }
+
+      products.forEach((product) => {
+        product.addEventListener("click", () => openModal(product));
+        product.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openModal(product);
+          }
+        });
+      });
+
+      modal.addEventListener("click", (event) => {
+        if (event.target === modal) closeModal();
+      });
+
+      modalClose.addEventListener("click", closeModal);
+
+      window.addEventListener("vitaminbox:language-change", () => {
+        if (activeProduct && modal.classList.contains("is-open")) {
+          openModal(activeProduct);
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && modal.classList.contains("is-open")) {
+          closeModal();
+        }
+      });
+    </script>
+  </body>
+</html>
